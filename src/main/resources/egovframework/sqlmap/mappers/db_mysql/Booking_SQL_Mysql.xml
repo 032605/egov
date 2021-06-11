@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bookingDAO">
+	
+	<!--  <resultMap type="bookingVO" id="bookingMap">
+		<id column="SEQ" property="seq"
+		<result column="booking_date" property="bookingDate" />
+	</resultMap>
+	 -->
+	 
+	 
+	<insert id="bookingDAO.insertBooking" parameterType="bookingVO">
+		<![CDATA[
+		INSERT INTO BOOKING
+			(ID, NAME, BOOKING_DATE, DATE, STATUS, LOCATION)
+		VALUES
+			(#{id}, #{name}, #{booking_date}, now(), '2', #{location});
+		]]>
+	</insert>
+	
+   <!-- 예약 확인 -->
+   <select id="bookingDAO.selectBookingList" parameterType="bookingVO" resultType="bookingVO">
+       SELECT * FROM BOOKING
+       WHERE 1=1
+       <if test="auth != 'adm'">
+        	AND WHERE ID = #{id}
+       </if>
+       <if test="searchKeyword != ''">
+       		AND ( LOCATION LIKE CONCAT('%',#{searchKeyword}, '%')
+       			OR NAME LIKE CONCAT('%', #{searchKeyword}, '%') )
+       </if>
+       ORDER BY DATE DESC
+   </select>
+   <!-- //예약 확인 -->
+   
+   	<!--  목록 개수 -->
+	<select id="bookingDAO.selectBookingListCnt" parameterType="bookingVO" resultType="int">
+		<![CDATA[
+		SELECT COUNT(*) FROM BOOKING
+		WHERE LOCATION LIKE CONCAT('%', #{searchKeyword}, '%')
+		OR NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+		]]>
+	</select>
+	<!-- // 목록 개수 -->
+   
+   <update id="bookingDAO.updateBooking" parameterType="bookingVO">
+       <![CDATA[
+       UPDATE BOOKING SET
+       STATUS = #{status}
+       WHERE SEQ = #{seq}
+       ]]>
+   </update>
+</mapper>

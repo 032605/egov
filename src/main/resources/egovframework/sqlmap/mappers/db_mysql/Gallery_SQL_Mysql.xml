@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="galleryDAO">
+
+<!-- 갤러리 목록 -->
+<select id="galleryDAO.selectGalleryList" parameterType="galleryVO" resultType="galleryVO">
+		<![CDATA[
+		SELECT * FROM GALLERY;
+		]]>
+
+</select>
+<!-- //갤러리 목록 -->
+
+<!-- 갤러리 상세 뷰 -->
+<select id="galleryDAO.selectGalleryView" parameterType="galleryVO" resultType="galleryVO">
+		<![CDATA[
+		SELECT * FROM GALLERY
+		WHERE SEQ = #{seq};
+		]]>
+
+</select>
+<!-- //갤러리 상세 뷰 -->
+
+<!-- 갤러리 수정 -->
+<update id="galleryDAO.updateGallery" parameterType="galleryVO">
+		UPDATE GALLERY
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="subject != null"><![CDATA[ SUBJECT = #{subject}, ]]> </if>
+			<if test="writer != null"><![CDATA[ WRITER = #{writer}, ]]> </if>
+			<if test="contents != null"><![CDATA[ CONTENTS = #{contents}, ]]> </if>			
+			<if test="filename != null"><![CDATA[ FILENAME = #{filename}, ]]> </if>	
+			<if test="oriFilename != null"><![CDATA[ ORIFILENAME = #{oriFilename}, ]]> </if>							
+		</trim>
+		WHERE SEQ = #{seq};
+</update>
+<!-- //갤러리 수정 -->
+
+<!-- 갤러리 등록 -->
+<insert id="galleryDAO.insertGallery" parameterType="galleryVO">
+	<![CDATA[
+	INSERT INTO GALLERY
+	(SUBJECT, WRITER, DATE, CONTENTS, FILENAME, ORIFILENAME)
+	VALUES
+	(#{subject}, #{writer}, NOW(), #{contents}, #{filename}, #{oriFilename})
+	]]>
+</insert>
+<!-- //갤러리 등록 -->
+
+<!-- 갤러리 삭제 -->
+<insert id="galleryDAO.deleteGallery" parameterType="galleryVO">
+	<![CDATA[
+	DELETE FROM GALLERY WHERE SEQ = #{seq}
+	]]>
+</insert>
+<!-- //갤러리 삭제 -->
+
+
+</mapper>
